@@ -1,0 +1,49 @@
+Installation
+=============
+
+Add the following line to your server config file:
+
+LoadModule auth_ntlm_module modules/mod_authn_ntlm.so
+
+Dependencies
+=============
+
+You need to activate the following module (ldap_module) as well. Normally it is in your server config file, so just uncomment it:
+
+LoadModule ldap_module modules/mod_ldap.so
+
+If you want to add the authenticated user to your http header, load the following module as well and see below the sample config:
+
+LoadModule rewrite_module modules/mod_rewrite.so
+
+Sample Config
+=============
+
+  <Location /authenticate >
+    AllowOverride None
+    AuthName "Private location"
+    AuthType SSPI
+    NTLMAuth On
+    NTLMAuthoritative On
+    require valid-user
+    #require sspi-user EMEA\group_name
+
+    # use this to add the authenticated username to you header
+    # so any backend system can fetch the current user
+    # rewrite_module needs to be loaded then
+    RewriteEngine On
+    RewriteCond %{LA-U:REMOTE_USER} (.+)
+    RewriteRule . - [E=RU:%1]
+    RequestHeader set X_ISRW_PROXY_AUTH_USER %{RU}e
+  </Location>
+
+Build project
+=============
+
+The following package versions are while building the module.
+  
+Apache - httpd-2.4.4.tar
+Apr and Apr utils - apr-1.4.6-win32-src
+				apr-util-1.4.1-win32-src
+				apr-iconv-1.2.1-win32-src-r2
+PCRE - pcre-7.0-lib
