@@ -20,14 +20,21 @@ Sample Config
 =============
 
   <Location /authenticate >
-    AllowOverride None
+    #AllowOverride None
     AuthName "Private location"
     AuthType SSPI
     NTLMAuth On
     NTLMAuthoritative On
-    require valid-user
-    #require sspi-user EMEA\group_name
-
+    <RequireAll>
+        <RequireAny>
+            Require valid-user
+            #require sspi-user EMEA\group_name
+        </RequireAny>
+        <RequireNone>
+            Require user "ANONYMOUS LOGON"
+            Require user "NT-AUTORITÄT\ANONYMOUS-ANMELDUNG"
+        </RequireNone>
+    </RequireAll>
     # use this to add the authenticated username to you header
     # so any backend system can fetch the current user
     # rewrite_module needs to be loaded then
