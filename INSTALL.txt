@@ -20,7 +20,7 @@ Sample Config
 =============
 
   <Location /authenticate >
-    AllowOverride None
+    #AllowOverride None
     AuthName "Private location"
     AuthType SSPI
     NTLMAuth On
