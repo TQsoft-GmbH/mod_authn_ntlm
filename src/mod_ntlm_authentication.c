@@ -423,6 +423,44 @@ static int set_connection_details(sspi_auth_ctx* ctx)
 	return OK;
 }
 
+/**
+ * Tell whether Internet Explorer is asking for re-authentication before
+ * sending POST data.
+ *
+ * This behavior is IE specific and will cause a bug with the following
+ * conditions:
+ *		* method is POST
+ *		* Context-Length is 0
+ *		* an SSPI connection record already exists for this connection
+ *
+ * Normally, this SSPI module will NOT treat this as a request for
+ * re-authentication but as a POST request with no body (thus "dropping" the
+ * contents of the POST, as seen in this bug:
+ * http://sourceforge.net/tracker/index.php?func=detail&aid=1499289&group_id=162518&atid=824098
+ *
+ * Thanks to 'nobody' on 2007-02-01 for the details on why this occurs.
+ *
+ * The previous work-around was to force this module to reauthenticate
+ * every request, which causes a lot of extra 401 errors and traffic to
+ * your domain controller.
+ *
+ * Instead, we can now check for IE's behaviour and reauthenticate only when
+ * needed.
+ *
+ * @param ctx The SSPI Authentication context of the current request.
+ */
+static int ie_post_needs_reauth(const sspi_auth_ctx* ctx) {
+
+	const char* contentLen = apr_table_get(ctx->r->headers_in, "Content-Length");
+
+	if (lstrcmpi(ctx->r->method, "POST") == 0 && contentLen != NULL &&
+			lstrcmpi(contentLen, "0") == 0 &&
+			ctx->scr != NULL && ctx->scr->username != NULL)
+		return 1;
+	else
+		return 0;
+}
+
 /* Security context is negotiated between the client and server ie here between the 
    browser and the Apache server. */
 static int accept_security_context(sspi_auth_ctx* ctx)
@@ -556,6 +594,23 @@ int authenticate_sspi_user(request_rec *r)
 		ctx.scr = apr_pcalloc(r->connection->pool, sizeof(sspi_connection_rec));
 		apr_pool_userdata_setn(ctx.scr, sspiModuleInfo.userDataKeyString, cleanup_sspi_connection, 
 			r->connection->pool);
+	}
+	else if (ie_post_needs_reauth(&ctx)) {
+		// Internet Explorer wants to reauthenticate, not POST
+
+		ctx.scr->username = NULL;
+
+		if (ctx.scr->server_context.dwLower ||
+				ctx.scr->server_context.dwUpper) {
+			sspiModuleInfo.functable->DeleteSecurityContext(&ctx.scr->server_context);
+			ctx.scr->server_context.dwLower = 0;
+			ctx.scr->server_context.dwUpper = 0;
+
+			/*
+			ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, r->server,
+				"SSPI_jvl:	starting IE reauth");
+			*/
+		}
 	}
 
 	if (ctx.scr->username == NULL) {
