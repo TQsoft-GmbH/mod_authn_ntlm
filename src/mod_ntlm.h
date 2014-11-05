@@ -43,6 +43,9 @@
 #include <security.h>
 #include <string.h>
 
+/* sockaddr_in6 required by apr_network_io.h */
+#include <ws2tcpip.h>
+
 /* HTTPD headers */
 #include "ap_config.h"
 #include "apr_base64.h"

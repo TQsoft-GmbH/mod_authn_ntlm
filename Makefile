@@ -12,7 +12,8 @@ AP_INCLUDES=\
 AP_LIBPATH=\
 	/LIBPATH:"$(APACHEDIR)\Release"\
 	/LIBPATH:"$(APACHEDIR)\srclib\apr\Release"\
-	/LIBPATH:"$(APACHEDIR)\srclib\apr-util\Release"
+	/LIBPATH:"$(APACHEDIR)\srclib\apr-util\Release"\
+	/LIBPATH:"$(APACHEDIR)\lib"
 
 SRCDIR=src
 BINDIR=bin
