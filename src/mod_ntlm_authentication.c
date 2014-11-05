@@ -455,10 +455,11 @@ static int ie_post_needs_reauth(const sspi_auth_ctx* ctx) {
 
 	if (lstrcmpi(ctx->r->method, "POST") == 0 && contentLen != NULL &&
 			lstrcmpi(contentLen, "0") == 0 &&
-			ctx->scr != NULL && ctx->scr->username != NULL)
+			ctx->scr != NULL && ctx->scr->username != NULL){
 		return 1;
-	else
+	} else {
 		return 0;
+	}
 }
 
 /* Security context is negotiated between the client and server ie here between the 
