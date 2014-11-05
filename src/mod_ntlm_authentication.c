@@ -597,8 +597,7 @@ int authenticate_sspi_user(request_rec *r)
 			r->connection->pool);
 	}
 	else if (ie_post_needs_reauth(&ctx)) {
-		// Internet Explorer wants to reauthenticate, not POST
-
+		// Internet Explorer wants to re authenticate, not POST
 		ctx.scr->username = NULL;
 
 		if (ctx.scr->server_context.dwLower ||
@@ -606,11 +605,9 @@ int authenticate_sspi_user(request_rec *r)
 			sspiModuleInfo.functable->DeleteSecurityContext(&ctx.scr->server_context);
 			ctx.scr->server_context.dwLower = 0;
 			ctx.scr->server_context.dwUpper = 0;
-
-			/*
-			ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, r->server,
-				"SSPI_jvl:	starting IE reauth");
-			*/
+			
+			ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
+				"SSPI:	starting IE re authentication");
 		}
 	}
 
