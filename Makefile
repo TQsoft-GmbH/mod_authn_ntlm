@@ -2,6 +2,11 @@ APACHEDIR=D:\Informer\Apache
 MSVCDIR=D:\Programme (x86)\Microsoft Visual Studio 11.0\VC
 PLATSDKDIR=D:\Programme\Microsoft Platform SDK
 
+#Example for Apache Lounge VC10 Win32
+#APACHEDIR=C:\Apache24
+#MSVCDIR=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC
+#PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A
+
 LIBAPR=libapr-1.lib
 LIBAPRUTIL=libaprutil-1.lib
 
