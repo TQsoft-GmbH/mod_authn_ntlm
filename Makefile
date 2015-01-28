@@ -1,11 +1,19 @@
 APACHEDIR=D:\Informer\Apache
 MSVCDIR=D:\Programme (x86)\Microsoft Visual Studio 11.0\VC
 PLATSDKDIR=D:\Programme\Microsoft Platform SDK
+EXTRAARCH=.
 
 #Example for Apache Lounge VC10 Win32
 #APACHEDIR=C:\Apache24
 #MSVCDIR=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC
 #PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A
+#EXTRAARCH=.
+
+#Example for Apache Lounge VC11 Win64
+#APACHEDIR=C:\Apache24
+#MSVCDIR=C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC
+#PLATSDKDIR=C:\NOTHING123
+#EXTRAARCH=amd64
 
 LIBAPR=libapr-1.lib
 LIBAPRUTIL=libaprutil-1.lib
@@ -35,7 +43,7 @@ LDFLAGS=/nologo
 DEFINES=/D WIN32
 
 INCLUDES=$(AP_INCLUDES) /I "$(PLATSDKDIR)\include" /I "$(MSVCDIR)\include"
-LIBPATH=$(AP_LIBPATH) /LIBPATH:"$(PLATSDKDIR)\lib" /LIBPATH:"$(MSVCDIR)\lib"
+LIBPATH=$(AP_LIBPATH) /LIBPATH:"$(PLATSDKDIR)\lib" /LIBPATH:"$(MSVCDIR)\lib\$(EXTRAARCH)"
 LIBRARIES=libhttpd.lib $(LIBAPR) $(LIBAPRUTIL) kernel32.lib advapi32.lib ole32.lib
 
 !if ($(DEBUG) != 0)
