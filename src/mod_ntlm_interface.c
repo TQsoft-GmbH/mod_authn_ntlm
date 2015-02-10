@@ -133,7 +133,7 @@ static int get_basic_userpass(sspi_auth_ctx* ctx, const char *auth_line)
 	/* ap_getword_nulls will preserve empty entries */
     ctx->hdr.User = ap_getword_nulls(ctx->r->pool, &ptr, ':');
     if (ctx->hdr.User) {
-        ctx->hdr.UserLength = strlen(ctx->hdr.User);
+        ctx->hdr.UserLength = (unsigned long)strlen(ctx->hdr.User);
     } else {
 	    /* send failure as user is null */
         note_sspi_auth_failure(ctx->r);
@@ -154,16 +154,16 @@ static int get_basic_userpass(sspi_auth_ctx* ctx, const char *auth_line)
 			   the domainptr will have the domain name as the string */
             *domainptr = '\0';
             ctx->hdr.Domain = ctx->hdr.User;
-            ctx->hdr.DomainLength = strlen(ctx->hdr.Domain);
+            ctx->hdr.DomainLength = (unsigned long)strlen(ctx->hdr.Domain);
             ctx->hdr.User = domainptr + 1;
-            ctx->hdr.UserLength = strlen(ctx->hdr.User);
+            ctx->hdr.UserLength = (unsigned long)strlen(ctx->hdr.User);
             break;
         }
     }
     
     ctx->hdr.Password = ptr;
     if (ctx->hdr.Password) {
-        ctx->hdr.PasswordLength = strlen(ctx->hdr.Password);
+        ctx->hdr.PasswordLength = (unsigned long)strlen(ctx->hdr.Password);
     } else {
 	    /* if no password send authentication failure */
         note_sspi_auth_failure(ctx->r);
