@@ -643,7 +643,7 @@ int authenticate_sspi_user(request_rec *r)
 				ctx.crec->sspi_optional) {
 				ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
 					"SSPI: Optional auth exercised phase 1");
-				ctx.r->user = "ALLOWED\\ANONYMOUS";
+				ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
 				ctx.r->ap_auth_type = "Basic";
 				return OK;
 			}
@@ -656,7 +656,7 @@ int authenticate_sspi_user(request_rec *r)
 				ctx.crec->sspi_optional) {
 				ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
 					"SSPI: Optional auth exercised phase 2");
-				ctx.r->user = "ALLOWED\\ANONYMOUS";
+				ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
 				ctx.r->ap_auth_type = "Basic";
 				return OK;
 			}
@@ -670,7 +670,7 @@ int authenticate_sspi_user(request_rec *r)
 					ctx.crec->sspi_optional) {
 					ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
 						"SSPI: Optional auth exercised phase 3");
-					ctx.r->user = "ALLOWED\\ANONYMOUS";
+					ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
 					ctx.r->ap_auth_type = "Basic";
 					return OK;
 				}
