@@ -36,7 +36,7 @@ DEBUG=0
 !endif
 
 CC=cl
-CFLAGS=/nologo /W3 
+CFLAGS=/nologo /W3 /WX
 RCFLAGS=/nologo
 LD=link
 LDFLAGS=/nologo
