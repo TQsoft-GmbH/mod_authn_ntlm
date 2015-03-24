@@ -112,6 +112,7 @@ typedef struct sspi_config_struct {
     unsigned int sspi_omitdomain;
     unsigned int sspi_basicpreferred;
     unsigned int sspi_msie3hack;
+    unsigned int sspi_optional;
     char *sspi_package_basic;
     char *sspi_domain;
     char *sspi_usernamecase;

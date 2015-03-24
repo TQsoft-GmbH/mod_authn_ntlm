@@ -1,6 +1,6 @@
-APACHEDIR=D:\Informer\Apache
-MSVCDIR=D:\Programme (x86)\Microsoft Visual Studio 11.0\VC
-PLATSDKDIR=D:\Programme\Microsoft Platform SDK
+APACHEDIR=C:\Apache_24_Module\httpd-2.4.10
+MSVCDIR=C:\Program Files (x86)\\Microsoft Visual Studio 11.0\VC
+PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A
 EXTRAARCH=.
 
 #Example for Apache Lounge VC10 Win32
@@ -36,7 +36,7 @@ DEBUG=0
 !endif
 
 CC=cl
-CFLAGS=/nologo /W3 /WX
+CFLAGS=/nologo /W3 
 RCFLAGS=/nologo
 LD=link
 LDFLAGS=/nologo
