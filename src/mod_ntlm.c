@@ -85,6 +85,11 @@ static const command_rec sspi_cmds[] =
 	AP_INIT_FLAG("NTLMChainAuth", ap_set_flag_slot,
                  (void *) APR_OFFSETOF(sspi_config_rec, sspi_chain_auth), OR_AUTHCFG, 
                  "set to 'on' if you want an alternative authorization module like SVNPathAuthz to work at the same level"),
+	 AP_INIT_FLAG("NTLMNotForced", ap_set_flag_slot,
+                 (void *)APR_OFFSETOF(sspi_config_rec, sspi_optional), OR_AUTHCFG,
+                 "Set to on to allow requests pass even when user not really authorized "
+                 "This is needed if same resources can be access with and without NTLM auth"),
+
     {NULL}
 };
 

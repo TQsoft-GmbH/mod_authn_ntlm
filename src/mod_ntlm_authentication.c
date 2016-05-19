@@ -453,6 +453,7 @@ static int ie_post_needs_reauth(const sspi_auth_ctx* ctx) {
 
 	const char* contentLen = apr_table_get(ctx->r->headers_in, "Content-Length");
 
+
 	if (lstrcmpi(ctx->r->method, "POST") == 0 && contentLen != NULL &&
 			lstrcmpi(contentLen, "0") == 0 &&
 			ctx->scr != NULL && ctx->scr->username != NULL){
@@ -461,6 +462,30 @@ static int ie_post_needs_reauth(const sspi_auth_ctx* ctx) {
 		return 0;
 	}
 }
+
+/*
+ * IE sends POST requests without body if it insists on still using auth.
+ * Use NTLMNotForced flag to enable scenarios where same pages can be accessed with and without NTLM auth
+*@param ctx The SSPI Authentication context of the current request.
+*/
+static int ie_post_empty(const sspi_auth_ctx* ctx) {
+
+	const char* contentLen = apr_table_get(ctx->r->headers_in, "Content-Length");
+
+	ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, ctx->r->server,
+		"SSPI: Testing for IE bug, request %s %s", ctx->r->method, contentLen);
+
+	if (lstrcmpi(ctx->r->method, "POST") == 0 && contentLen != NULL &&
+		lstrcmpi(contentLen, "0") == 0)
+	{
+		ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, ctx->r->server,
+			"SSPI: Found empty POST request");
+		return 1;
+	}
+	return 0;
+}
+
+
 
 /* Security context is negotiated between the client and server ie here between the 
    browser and the Apache server. */
@@ -614,17 +639,41 @@ int authenticate_sspi_user(request_rec *r)
 	if (ctx.scr->username == NULL) {
 
 		if (res = get_sspi_header(&ctx)) {
+			if (!ie_post_empty(&ctx) &&
+				ctx.crec->sspi_optional) {
+				ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
+					"SSPI: Optional auth exercised phase 1");
+				ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
+				ctx.r->ap_auth_type = "Basic";
+				return OK;
+			}
 			return res;
 		}
 
 		if ((! ctx.scr->have_credentials) && 
 			(res = obtain_credentials(&ctx))) {
-				return res;
+			if (!ie_post_empty(&ctx) &&
+				ctx.crec->sspi_optional) {
+				ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
+					"SSPI: Optional auth exercised phase 2");
+				ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
+				ctx.r->ap_auth_type = "Basic";
+				return OK;
+			}
+			return res;
 		}
 
 		if (ctx.hdr.authtype == typeSSPI) {
 
 			if (res = accept_security_context(&ctx)) {
+				if (!ie_post_empty(&ctx) &&
+					ctx.crec->sspi_optional) {
+					ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
+						"SSPI: Optional auth exercised phase 3");
+					ctx.r->user = "NT AUTHORITY\\ANONYMOUS LOGON";
+					ctx.r->ap_auth_type = "Basic";
+					return OK;
+				}
 				return res;
 			}
 		} else if (ctx.hdr.authtype == typeBasic) {
