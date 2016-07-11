@@ -35,3 +35,11 @@ for Apache 2.4 we decided to share this project to the community.
 - `NTLMPerRequestAuth` => set to 'on' if you want authorization per request instead of per connection
 - `NTLMChainAuth` => set to 'on' if you want an alternative authorization module like SVNPathAuthz to work at the same level
 - `NTLMNotForced` => Set to on to allow requests pass even when user not really authorized This is needed if same resources can be access with and without NTLM auth
+
+#Configure several groups
+
+If you want to add more then one group then use the following syntax, so the module can process them correctly.
+
+    <RequireAny>
+        require sspi-group "DOMAIN\\GROUP2" "DOMAIN\\GROUP1"
+    </RequireAny>
