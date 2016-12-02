@@ -43,3 +43,12 @@ If you want to add more then one group then use the following syntax, so the mod
     <RequireAny>
         require sspi-group "DOMAIN\GROUP2" "DOMAIN\GROUP1"
     </RequireAny>
+
+#Configure server to allow local ntlm authentication
+
+If you set apache to listen to a FQDN you might not be able to authenticate against the site if you are open this site on the server itself.
+
+You can read about the cause and the workaround here: https://support.microsoft.com/en-us/kb/896861
+
+**I did test method 1 and added the FQDN domain in the registry, after ntlm authentication works on the local server.**
+
