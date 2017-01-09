@@ -32,16 +32,14 @@ Sample Config
         </RequireAny>
         <RequireNone>
             Require user "ANONYMOUS LOGON"
-            Require user "NT-AUTORITÄT\ANONYMOUS-ANMELDUNG"
+            Require user "NT-AUTORITÃ„T\ANONYMOUS-ANMELDUNG"
         </RequireNone>
     </RequireAll>
     # use this to add the authenticated username to you header
     # so any backend system can fetch the current user
     # rewrite_module needs to be loaded then
-    RewriteEngine On
-    RewriteCond %{LA-U:REMOTE_USER} (.+)
-    RewriteRule . - [E=RU:%1]
-    RequestHeader set X_ISRW_PROXY_AUTH_USER %{RU}e
+    # while X_ISRW_PROXY_AUTH_USER is your header name
+    RequestHeader set X_ISRW_PROXY_AUTH_USER expr=%{REMOTE_USER}
   </Location>
 
 Build project
