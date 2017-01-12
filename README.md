@@ -21,13 +21,22 @@ for Apache 2.4 we decided to share this project to the community.
 
 #List of available parameters
 
+Notice:
+
+    if you want to set "NTLMDomain" or "NTLMDefaultDomain", please set both
+    "NTLMOffserBasic" and "NTLMBasicPreferred" to "on". this is because
+    we can't modify NTLMv2 response, we have to let user send clear text
+    username and password, then ntlm module will use username and password
+    to generate NTLM context, and do the authentication.
+
 - `NTLMAuth` => set to 'on' to activate NTLM authentication here
 - `NTLMOfferNTLM` => set to 'off' to allow access control to be passed along to lower modules if the UserID is not known to this module
 - `NTLMAuthoritative` => set to 'off' to allow access control to be passed along to lower modules if the UserID is not known to this module
 - `NTLMOfferBasic` => set to 'on' to allow the client to authenticate against NT with 'Basic' authentication instead of using the NTLM protocol
 - `NTLMPackage` => set to the name of the package you want to use to authenticate users
 - `NTLMPackages` => set to the name of the package you want to use to authenticate users
-- `NTLMDomain` => set to the domain you want users authenticated against for cleartext authentication - if not specified, the local machine, then all trusted domains are checked
+- `NTLMDomain` => force users to authenticated against for cleartext authentication if specified.
+- `NTLMDefaultDomain` => set to the domain you want users authenticated against for cleartext authentication - if not specified, the local machine, then all trusted domains are checked
 - `NTLMOmitDomain` => set to 'on' if you want the usernames to have the domain set to 'on' if you want the usernames to have the domain
 - `NTLMUsernameCase` => set to 'lower' if you want the username and domain to be lowercase, set to 'upper' if you want the username and domain to be uppercase, if not specified, username and domain case conversion is disabled
 - `NTLMBasicPreferred` => set to 'on' if you want basic authentication to be the higher priority
