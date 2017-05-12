@@ -68,101 +68,102 @@
 
 /* Type and struct definitions */
 typedef struct sspi_module_struct {
-	BOOL			supportsSSPI;
-	LPSTR			defaultPackage;
-	LPOSVERSIONINFO		lpVersionInformation;
-	char			userDataKeyString[UUID_STRING_LEN];
-	HMODULE			securityDLL;
-	SecurityFunctionTable	*functable;
-	ULONG			numPackages;
-	PSecPkgInfo		pkgInfo;
+    BOOL supportsSSPI;
+    LPSTR defaultPackage;
+    LPOSVERSIONINFO lpVersionInformation;
+    char userDataKeyString[UUID_STRING_LEN];
+    HMODULE securityDLL;
+    SecurityFunctionTable *functable;
+    ULONG numPackages;
+    PSecPkgInfo pkgInfo;
 #ifdef _DEBUG
-	unsigned int		currentlyDebugging;
-#endif				/* def _DEBUG */
+    unsigned int currentlyDebugging;
+#endif /* def _DEBUG */
 } sspi_module_rec;
 
 typedef struct sspi_connection_struct {
-	unsigned int		have_credentials;
+    unsigned int have_credentials;
 
-	/* Credentials */
-	CredHandle		client_credentials;
-	CredHandle		server_credentials;
-
-	/* Client context */
-	CtxtHandle		client_context;
-	TimeStamp		client_ctxtexpiry;
-
-	/* Server context */
-	CtxtHandle		server_context;
-	TimeStamp		server_ctxtexpiry;
-
-	/* Information about the REMOTE_USER */
-	HANDLE			usertoken;
-	char			*username;
-	apr_table_t		*groups;
-	char			*package;
-	int			sspi_failing;
+    /* Credentials */
+    CredHandle client_credentials;
+    CredHandle server_credentials;
+    
+    /* Client context */
+    CtxtHandle client_context;
+    TimeStamp client_ctxtexpiry;
+    
+    /* Server context */
+    CtxtHandle server_context;
+    TimeStamp server_ctxtexpiry;
+    
+    /* Information about the REMOTE_USER */
+    HANDLE usertoken;
+    char *username;
+    apr_table_t *groups;
+    char *package;
+    int sspi_failing;
 } sspi_connection_rec;
 
 typedef struct sspi_config_struct {
-	unsigned int		sspi_on;
-	unsigned int		sspi_authoritative;
-	unsigned int		sspi_offersspi;
-	unsigned int		sspi_offerbasic;
-	unsigned int		sspi_omitdomain;
-	unsigned int		sspi_basicpreferred;
-	unsigned int		sspi_msie3hack;
-	unsigned int		sspi_optional;
-	char			*sspi_package_basic;
-	char			*sspi_domain;
-	char			*sspi_default_domain;
-	size_t			sspi_default_domain_len;
-	char			*sspi_usernamecase;
-	unsigned int		sspi_per_request_auth;
-	unsigned int		sspi_chain_auth;
-	char			*sspi_packages;
+    unsigned int sspi_on;
+    unsigned int sspi_authoritative;
+    unsigned int sspi_offersspi;
+    unsigned int sspi_offerbasic;
+    unsigned int sspi_omitdomain;
+    unsigned int sspi_basicpreferred;
+    unsigned int sspi_msie3hack;
+    unsigned int sspi_optional;
+    char *sspi_package_basic;
+    char *sspi_domain;
+    char *sspi_usernamecase;
+    unsigned int sspi_per_request_auth;
+	unsigned int sspi_chain_auth;
+    char *sspi_packages;
 } sspi_config_rec;
 
 typedef enum {
-	typeSSPI = 1,
-	typeBasic
+    typeSSPI = 1,
+    typeBasic
 } NTLMAuthType;
 
 typedef struct sspi_header_struct {
-	unsigned char		*User;
-	unsigned long		UserLength;
-	unsigned char		*Domain;
-	unsigned long		DomainLength;
-	unsigned char		*Password;
-	unsigned long		PasswordLength;
-	unsigned long		Flags;
-	NTLMAuthType		authtype;
+  unsigned char *User;
+  unsigned long UserLength;
+  unsigned char *Domain;
+  unsigned long DomainLength;
+  unsigned char *Password;
+  unsigned long PasswordLength;
+  unsigned long Flags;
+  NTLMAuthType authtype;
 } sspi_header_rec;
 
 typedef struct sspi_auth_ctx_struct {
-	request_rec		*r;
-	sspi_config_rec		*crec;
-	sspi_connection_rec	*scr;
-	sspi_header_rec		hdr;
+  request_rec* r;
+  sspi_config_rec* crec;
+  sspi_connection_rec* scr;
+  sspi_header_rec hdr;
 } sspi_auth_ctx;
 
 /* Function Prototypes */
-int authenticate_sspi_user(request_rec *);
+int authenticate_sspi_user(request_rec * ) ;
 authz_status sspi_user_check_authorization(request_rec *,
-					   const char *, const void *);
+                                                 const char *,
+                                                 const void *);
 authz_status sspi_group_check_authorization(request_rec *,
-					    const char *, const void *);
+                                                  const char *,
+                                                  const void *);
 authz_status sspi_valid_check_authorization(request_rec *,
-					    const char *, const void *);
+                                                  const char *,
+                                                  const void *);
 apr_status_t cleanup_sspi_connection(void *);
 
-void *create_sspi_dir_config(apr_pool_t *, char *);
-void *create_sspi_server_config(apr_pool_t *p, server_rec *s);
-void *merge_sspi_dir_config(apr_pool_t *p, void *base_conf, void *new_conf);
+void* create_sspi_dir_config(apr_pool_t *, char *);
+void* create_sspi_server_config(apr_pool_t *p, server_rec *s);
+void* merge_sspi_dir_config(apr_pool_t *p, void *base_conf, void *new_conf);
 
 sspi_config_rec *get_sspi_config_rec(request_rec *);
-int get_sspi_header(sspi_auth_ctx *ctx);
-void note_sspi_auth_challenge(sspi_auth_ctx *ctx, const char *);
+int get_sspi_header(sspi_auth_ctx* ctx);
+void note_sspi_auth_challenge(sspi_auth_ctx* ctx, const char *);
 void note_sspi_auth_failure(request_rec *r);
 void note_sspi_auth_failure_old(request_rec *);
 char *uuencode_binary(apr_pool_t *, const char *, int);
@@ -171,4 +172,5 @@ unsigned char *uudecode_binary(apr_pool_t *, const char *, int *);
 /* Global variables */
 extern sspi_module_rec sspiModuleInfo;
 
-#endif				/* ndef _MOD_NTLM_H_ */
+#endif /* ndef _MOD_NTLM_H_ */
+

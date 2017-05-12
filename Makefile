@@ -1,18 +1,7 @@
-#APACHEDIR=C:\Apache_24_Module\httpd-2.4.10
-#MSVCDIR=C:\Program Files (x86)\\Microsoft Visual Studio 11.0\VC
-#PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A
-#EXTRAARCH=.
-
-#APACHEDIR=C:\Users\tomonori\Desktop\ntlm\src\httpd-2.4.4
-#MSVCDIR=C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC
-#PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A
-#EXTRAARCH=.
-
-APACHEDIR=E:\ntlm\src\httpd-2.4.4
-MSVCDIR=C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC
-PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A
+APACHEDIR=C:\Apache_24_Module\httpd-2.4.10
+MSVCDIR=C:\Program Files (x86)\\Microsoft Visual Studio 11.0\VC
+PLATSDKDIR=C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A
 EXTRAARCH=.
-
 
 #Example for Apache Lounge VC10 Win32
 #APACHEDIR=C:\Apache24

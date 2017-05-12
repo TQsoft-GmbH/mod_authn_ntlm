@@ -34,4 +34,5 @@
     STRINGIFY(MOD_NTLM_VERSION_MID) "." \
     STRINGIFY(MOD_NTLM_VERSION_MINOR)
 
-#endif				/* ndef _MOD_NTLM_VERSION_H_ */
+#endif /* ndef _MOD_NTLM_VERSION_H_ */
+
