@@ -36,7 +36,7 @@ APLOG_USE_MODULE(auth_ntlm);
 void *create_sspi_server_config(apr_pool_t *p, server_rec *s)
 {
 	sspi_config_rec *crec =
-	    (sspi_config_rec *) apr_pcalloc(p, sizeof(sspi_config_rec));
+		(sspi_config_rec *) apr_pcalloc(p, sizeof(sspi_config_rec));
 
 	/* Set the defaults to true */
 	crec->sspi_offersspi = TRUE;
@@ -50,7 +50,7 @@ void *create_sspi_server_config(apr_pool_t *p, server_rec *s)
 void *create_sspi_dir_config(apr_pool_t *p, char *d)
 {
 	sspi_config_rec *crec =
-	    (sspi_config_rec *) apr_pcalloc(p, sizeof(sspi_config_rec));
+		(sspi_config_rec *) apr_pcalloc(p, sizeof(sspi_config_rec));
 
 	/* Set the defaults to true */
 	crec->sspi_offersspi = TRUE;
@@ -91,7 +91,7 @@ static int get_sspi_userpass(sspi_auth_ctx *ctx, const char *auth_line)
 	/* we are decoding the base64 encoded password */
 	if (auth_line) {
 		ctx->hdr.Password = uudecode_binary(ctx->r->pool,
-						    auth_line, &len);
+							auth_line, &len);
 		ctx->hdr.PasswordLength = len;
 		ctx->hdr.authtype = typeSSPI;
 	} else {
@@ -124,7 +124,7 @@ static int get_basic_userpass(sspi_auth_ctx *ctx, const char *auth_line)
 	/* decoding the base64 decoded password */
 	if (!(ptr = uudecode_binary(ctx->r->pool, auth_line, &len))) {
 		/* if decoding was not successful then issue an authentication
-		   failure */
+			failure */
 		note_sspi_auth_failure(ctx->r);
 		if (ctx->crec->sspi_authoritative) {
 			return HTTP_BAD_REQUEST;
@@ -149,29 +149,29 @@ static int get_basic_userpass(sspi_auth_ctx *ctx, const char *auth_line)
 
 	/* trying to split the domain name from the user name */
 	for (domainptr = ctx->hdr.User;
-	     (unsigned long)(domainptr - ctx->hdr.User) < ctx->hdr.UserLength;
-	     domainptr++) {
+		 (unsigned long)(domainptr - ctx->hdr.User) < ctx->hdr.UserLength;
+		 domainptr++) {
 
 		/* people can enter username in both ways like DOMAIN\USERNAME or DOMAIN/USERNAME
-		   so we have to take care of both slashes */
+			so we have to take care of both slashes */
 		if (*domainptr == '\\' || *domainptr == '/') {
 			/* when we get a slash we put a null character so that
-			   the domainptr will have the domain name as the string */
+				the domainptr will have the domain name as the string */
 			*domainptr = '\0';
 			ctx->hdr.Domain = ctx->hdr.User;
 			ctx->hdr.DomainLength =
-			    (unsigned long)strlen(ctx->hdr.Domain);
+				(unsigned long)strlen(ctx->hdr.Domain);
 			ctx->hdr.User = domainptr + 1;
 			ctx->hdr.UserLength =
-			    (unsigned long)strlen(ctx->hdr.User);
+				(unsigned long)strlen(ctx->hdr.User);
 			break;
 		} else if (*domainptr == '@') {
 			*domainptr = '\0';
 			ctx->hdr.Domain = domainptr + 1;
 			ctx->hdr.DomainLength =
-			    (unsigned long)strlen(ctx->hdr.Domain);
+				(unsigned long)strlen(ctx->hdr.Domain);
 			ctx->hdr.UserLength =
-			    (unsigned long)strlen(ctx->hdr.User);
+				(unsigned long)strlen(ctx->hdr.User);
 			break;
 		}
 	}
@@ -179,7 +179,7 @@ static int get_basic_userpass(sspi_auth_ctx *ctx, const char *auth_line)
 	ctx->hdr.Password = ptr;
 	if (ctx->hdr.Password) {
 		ctx->hdr.PasswordLength =
-		    (unsigned long)strlen(ctx->hdr.Password);
+			(unsigned long)strlen(ctx->hdr.Password);
 	} else {
 		/* if no password send authentication failure */
 		note_sspi_auth_failure(ctx->r);
@@ -200,14 +200,14 @@ static int get_basic_userpass(sspi_auth_ctx *ctx, const char *auth_line)
 const char *get_authorization_header_name(request_rec *r)
 {
 	return (PROXYREQ_PROXY == r->proxyreq) ? "Proxy-Authorization"
-	    : "Authorization";
+		: "Authorization";
 }
 
 /* needed for the authentication part in a HTTP header */
 const char *get_authenticate_header_name(request_rec *r)
 {
 	return (PROXYREQ_PROXY == r->proxyreq) ? "Proxy-Authenticate"
-	    : "WWW-Authenticate";
+		: "WWW-Authenticate";
 }
 
 /* checking if the package is valid */
@@ -243,7 +243,7 @@ static int check_package_valid(sspi_auth_ctx *ctx, char *scheme)
 static void sspi_set_domain(sspi_auth_ctx *ctx)
 {
 	if (!ctx->crec->sspi_domain ||
-	    !ctx->crec->sspi_domain[0])
+		!ctx->crec->sspi_domain[0])
 		return;
 
 	ctx->hdr.Domain = ctx->crec->sspi_domain;
@@ -253,7 +253,7 @@ static void sspi_set_domain(sspi_auth_ctx *ctx)
 static void sspi_set_default_domain(sspi_auth_ctx *ctx)
 {
 	if (!ctx->crec->sspi_default_domain ||
-	    !ctx->crec->sspi_default_domain[0])
+		!ctx->crec->sspi_default_domain[0])
 		return;
 
 	/* Ignore it, if it has been set. */
@@ -271,8 +271,8 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 	char *scheme;
 	/* Finding if its Proxy-Authorization or WWW authenticate one */
 	const char *auth_line = apr_table_get(ctx->r->headers_in,
-					      get_authorization_header_name
-					      (ctx->r));
+							get_authorization_header_name
+							(ctx->r));
 
 	/* If the client didn't supply an Authorization: (or Proxy-Authorization) 
 	 * header, we need to reply 401 and supply a WWW-Authenticate
@@ -289,8 +289,8 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 	scheme = ap_getword_white(ctx->r->pool, &auth_line);
 
 	if (ctx->crec->sspi_offerbasic &&
-	    ctx->crec->sspi_basicpreferred &&
-	    0 == lstrcmpi(scheme, "Basic")) {
+		ctx->crec->sspi_basicpreferred &&
+		0 == lstrcmpi(scheme, "Basic")) {
 		ctx->scr->package = ctx->crec->sspi_package_basic;
 		ret = get_basic_userpass(ctx, auth_line);
 		sspi_set_domain(ctx);
@@ -300,7 +300,7 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 		   0 == check_package_valid(ctx, scheme)) {
 		if (0 == ctx->scr->package)
 			ctx->scr->package =
-			    apr_pstrdup(ctx->r->connection->pool, scheme);
+				apr_pstrdup(ctx->r->connection->pool, scheme);
 		return get_sspi_userpass(ctx, auth_line);
 	}
 
@@ -308,9 +308,9 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 	if (ctx->crec->sspi_authoritative) {
 		/* error logs */
 		ap_log_rerror(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, ctx->r,
-			      "client used wrong authentication scheme: %s for %s (needed %s)",
-			      ctx->scr->package, ctx->r->uri,
-			      ctx->crec->sspi_packages);
+					"client used wrong authentication scheme: %s for %s (needed %s)",
+					ctx->scr->package, ctx->r->uri,
+					ctx->crec->sspi_packages);
 		note_sspi_auth_failure(ctx->r);
 		return HTTP_UNAUTHORIZED;
 	} else {
@@ -334,7 +334,7 @@ void note_sspi_auth_failure(request_rec *r)
 	/* if basic authentication is offered */
 	if (crec->sspi_offerbasic) {
 		basicline =
-		    apr_psprintf(r->pool, "Basic realm=\"%s\"",
+			apr_psprintf(r->pool, "Basic realm=\"%s\"",
 				 ap_auth_name(r));
 	}
 
@@ -343,7 +343,7 @@ void note_sspi_auth_failure(request_rec *r)
 		sspi_connection_rec *scr = 0;
 		/* getting user data */
 		apr_pool_userdata_get(&scr, sspiModuleInfo.userDataKeyString,
-				      r->connection->pool);
+					r->connection->pool);
 
 		if (scr == 0 || scr->sspi_failing <= MAX_RETRYS) {
 			char *w;
@@ -352,7 +352,7 @@ void note_sspi_auth_failure(request_rec *r)
 			/* populating the HTTP headers that needs to be send out */
 			if (crec->sspi_offerbasic && crec->sspi_basicpreferred) {
 				apr_table_addn(r->err_headers_out, auth_hdr,
-					       basicline);
+							basicline);
 				basicline = 0;
 			}
 
@@ -360,12 +360,12 @@ void note_sspi_auth_failure(request_rec *r)
 				while (*package_list) {
 					/* Copies everything from package_list to a new string */
 					w = ap_getword_white(r->pool,
-							     &package_list);
+								&package_list);
 					if (w[0]) {
 						/* add to the hashtable */
 						apr_table_addn(r->
-							       err_headers_out,
-							       auth_hdr, w);
+									err_headers_out,
+									auth_hdr, w);
 					}
 				}
 		}
@@ -384,8 +384,8 @@ void note_sspi_auth_challenge(sspi_auth_ctx *ctx, const char *challenge)
 	const char *auth_hdr = get_authenticate_header_name(ctx->r);
 
 	apr_table_setn(ctx->r->err_headers_out, auth_hdr,
-		       apr_psprintf(ctx->r->pool, "%s %s", ctx->scr->package,
-				    challenge));
+				apr_psprintf(ctx->r->pool, "%s %s", ctx->scr->package,
+					challenge));
 
 	if (ctx->r->connection->keepalives)
 		--ctx->r->connection->keepalives;
@@ -418,7 +418,7 @@ char *uuencode_binary(apr_pool_t *p, const char *data, int len)
 
 /* does the decoding of the base64 input */
 unsigned char *uudecode_binary(apr_pool_t *p, const char *data,
-			       int *decodelength)
+					int *decodelength)
 {
 	char *decoded;
 
