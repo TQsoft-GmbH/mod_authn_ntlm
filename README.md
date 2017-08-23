@@ -131,8 +131,8 @@ Find the build output at: `build\debug` or `build\release`
 
 ---
 
-Example Generators:
-====================
+Example Generators
+==================
 
 - Visual Studio 15 2017 [arch] = Generates Visual Studio 2017 project files. Optional [arch] can be "Win64" or "ARM".
 - Visual Studio 14 2015 [arch] = Generates Visual Studio 2015 project files. Optional [arch] can be "Win64" or "ARM".
