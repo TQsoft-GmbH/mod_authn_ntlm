@@ -210,11 +210,7 @@ static void log_sspi_auth_failure(request_rec *r, sspi_header_rec *hdr,
 		ap_log_rerror(APLOG_MARK, APLOG_ERR, errcode, r,
 				"user %s: authentication failure for \"%s\"%s",
 				hdr->User, r->uri, reason);
-  } else if (r->user) {
-    ap_log_rerror(APLOG_MARK, APLOG_ERR, errcode, r,
-      "authentication failure for \"%s\": user %s%s",
-      r->uri, r->user, reason);
-  } else {
+	} else {
 		ap_log_rerror(APLOG_MARK, APLOG_ERR, errcode, r,
 				"authentication failure for \"%s\": user unknown%s",
 				r->uri, reason);

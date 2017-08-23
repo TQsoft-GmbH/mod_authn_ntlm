@@ -247,7 +247,7 @@ static void sspi_set_domain(sspi_auth_ctx *ctx)
 		return;
 
 	ctx->hdr.Domain = ctx->crec->sspi_domain;
-	ctx->hdr.DomainLength = (unsigned long)strlen(ctx->crec->sspi_domain);
+	ctx->hdr.DomainLength = strlen(ctx->crec->sspi_domain);
 }
 
 static void sspi_set_default_domain(sspi_auth_ctx *ctx)
@@ -261,7 +261,7 @@ static void sspi_set_default_domain(sspi_auth_ctx *ctx)
 		return;
 
 	ctx->hdr.Domain = ctx->crec->sspi_default_domain;
-	ctx->hdr.DomainLength = (unsigned long)strlen(ctx->crec->sspi_default_domain);
+	ctx->hdr.DomainLength = strlen(ctx->crec->sspi_default_domain);
 }
 
 /* working up with SSPI header */
