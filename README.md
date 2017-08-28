@@ -27,11 +27,11 @@ Dependencies
 
 You need to activate the following module (ldap_module) as well. Normally it is in your server config file, so just uncomment it:
 
-`LoadModule ldap_module modules/mod_ldap.s`
+`LoadModule ldap_module modules/mod_ldap.so`
 
 If you want to add the authenticated user to your http header, load the following module as well and see below the sample config:
 
-`LoadModule rewrite_module modules/mod_rewrite.s`
+`LoadModule rewrite_module modules/mod_rewrite.so`
 
 Sample Config
 =============
