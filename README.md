@@ -65,7 +65,7 @@ List of available parameters
 **Note:**
 
     if you want to set "NTLMDomain" or "NTLMDefaultDomain", please set both
-    "NTLMOffserBasic" and "NTLMBasicPreferred" to "on". this is because
+    "NTLMOfferBasic" and "NTLMBasicPreferred" to "on". this is because
     we can't modify NTLMv2 response, we have to let user send clear text
     username and password, then ntlm module will use username and password
     to generate NTLM context, and do the authentication.
