@@ -102,6 +102,7 @@ typedef struct sspi_connection_struct {
 	apr_table_t		*groups;
 	char			*package;
 	int			sspi_failing;
+	char Failure;
 } sspi_connection_rec;
 
 typedef struct sspi_config_struct {
@@ -148,6 +149,7 @@ typedef struct sspi_auth_ctx_struct {
 
 /* Function Prototypes */
 int authenticate_sspi_user(request_rec *);
+int cleanup_sspi_user(request_rec *);
 authz_status sspi_user_check_authorization(request_rec *,
 					   const char *, const void *);
 authz_status sspi_group_check_authorization(request_rec *,

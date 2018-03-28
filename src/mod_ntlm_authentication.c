@@ -801,3 +801,17 @@ int authenticate_sspi_user(request_rec *r)
 
 	return OK;
 }
+
+// common cleanup function for data
+int cleanup_sspi_user(request_rec *r)
+{
+	sspi_config_rec * cfg = get_sspi_config_rec(r);
+	if (!r->main && cfg) {
+		sspi_connection_rec* conn;
+		if (!cfg->sspi_on || !r->user) {
+			return;
+		}
+		apr_pool_userdata_get(&conn, sspiModuleInfo.userDataKeyString, r->connection->pool);
+		cleanup_sspi_connection(conn);
+	}
+}
