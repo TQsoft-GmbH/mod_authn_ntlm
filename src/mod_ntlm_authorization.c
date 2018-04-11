@@ -124,8 +124,8 @@ int sspi_common_authz_check(request_rec *r,
 
 			ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
 					SSPILOGNO(00006)
-					"Access to %s failed, reason: inconsistent SSPI record",
-					r->uri);
+					"Access to %s failed, reason: inconsistent SSPI record. Debug: %s ; %s",
+					r->uri, (*pscr)->username, r->user);
 
 			*pas = AUTHZ_DENIED;
 			res = 0;
@@ -143,13 +143,14 @@ static void common_deny_actions(request_rec *r, sspi_connection_rec *scr)
 	   it doesnot make sense to continue with the connection. This could mean
 	   that the current request is the main request itself   */
 	if (r->main == NULL) {
-		cleanup_sspi_connection(scr);
+		//cleanup_sspi_connection(scr);
+		scr->Failure = 1;
 	}
 
 	/* error logs */
 	ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, SSPILOGNO(00003)
 			"access to %s failed, reason: user '%s' does not meet "
-			"'require'ments for user to be allowed access",
+			"requirements for user to be allowed access",
 			r->uri, r->user);
 
 	/* notification that the authentication has failed */
@@ -182,7 +183,6 @@ authz_status sspi_user_check_authorization(request_rec *r,
 
 	/* preparing for try again */
 	common_deny_actions(r, scr);
-
 	return AUTHZ_DENIED;
 }
 
@@ -214,7 +214,6 @@ authz_status sspi_group_check_authorization(request_rec *r,
 
 	/* preparing for try again */
 	common_deny_actions(r, scr);
-
 	return AUTHZ_DENIED;
 }
 
