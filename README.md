@@ -36,6 +36,8 @@ If you want to add the authenticated user to your http header, load the followin
 Sample Config
 =============
 
+    # make sure the header is only written in the auth location
+    RequestHeader unset X_ISRW_PROXY_AUTH_USER
     <Location /authenticate >
         #AllowOverride None
         AuthName "Private location"
