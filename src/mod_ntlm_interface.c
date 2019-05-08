@@ -355,13 +355,11 @@ void note_sspi_auth_failure(request_rec *r)
 				basicline = 0;
 			}
 
-			if (package_list)
-			{
+			if (package_list) {
 				// Fix wrong header syntax on Offer & Prefer Basic
 				// We already offered Basic Auth above, now we need to also offer NTLM if enabled
 				// If NTLM is not enabled: do not print second invalid WWW-Authenticate: Basic Header
-				if (!stricmp(package_list, "Basic"))
-				{
+				if (!stricmp(package_list, "Basic")) {
 					package_list = crec->sspi_offersspi ? "NTLM" : "\x00";
 				}
 
