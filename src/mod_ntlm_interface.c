@@ -359,22 +359,23 @@ void note_sspi_auth_failure(request_rec *r)
 			{
 				// Fix wrong header syntax on Offer & Prefer Basic
 				// We already offered Basic Auth above, now we need to also offer NTLM if enabled
-				if (!stricmp(package_list, "Basic") && crec->sspi_offersspi)
+				// If NTLM is not enabled: do not print second invalid WWW-Authenticate: Basic Header
+				if (!stricmp(package_list, "Basic"))
 				{
-					package_list = "NTLM";
+					package_list = crec->sspi_offersspi ? "NTLM" : "\x00";
 				}
 
 				while (*package_list) {
 					/* Copies everything from package_list to a new string */
 					w = ap_getword_white(r->pool,
-						&package_list);
+								&package_list);
 					if (w[0]) {
 						/* add to the hashtable */
 						apr_table_addn(r->
 									err_headers_out,
 									auth_hdr, w);
 					}
-			  }
+				}
 			}
 		}
 	}
