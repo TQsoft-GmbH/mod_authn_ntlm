@@ -360,7 +360,7 @@ void note_sspi_auth_failure(request_rec *r)
 				// We already offered Basic Auth above, now we need to also offer NTLM if enabled
 				// If NTLM is not enabled: do not print second invalid WWW-Authenticate: Basic Header
 				if (!stricmp(package_list, "Basic")) {
-					package_list = crec->sspi_offersspi ? "NTLM" : "\x00";
+					package_list = crec->sspi_offersspi ? "NTLM" : "";
 				}
 
 				while (*package_list) {
