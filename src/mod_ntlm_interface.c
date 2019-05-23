@@ -289,7 +289,6 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 	scheme = ap_getword_white(ctx->r->pool, &auth_line);
 
 	if (ctx->crec->sspi_offerbasic &&
-		ctx->crec->sspi_basicpreferred &&
 		0 == lstrcmpi(scheme, "Basic")) {
 		ctx->scr->package = ctx->crec->sspi_package_basic;
 		ret = get_basic_userpass(ctx, auth_line);
@@ -356,7 +355,14 @@ void note_sspi_auth_failure(request_rec *r)
 				basicline = 0;
 			}
 
-			if (package_list)
+			if (package_list) {
+				// Fix wrong header syntax on Offer & Prefer Basic
+				// We already offered Basic Auth above, now we need to also offer NTLM if enabled
+				// If NTLM is not enabled: do not print second invalid WWW-Authenticate: Basic Header
+				if (!stricmp(package_list, "Basic")) {
+					package_list = crec->sspi_offersspi ? "NTLM" : "";
+				}
+
 				while (*package_list) {
 					/* Copies everything from package_list to a new string */
 					w = ap_getword_white(r->pool,
@@ -368,6 +374,7 @@ void note_sspi_auth_failure(request_rec *r)
 									auth_hdr, w);
 					}
 				}
+			}
 		}
 	}
 
