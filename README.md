@@ -116,18 +116,26 @@ Build instructions
 - note build options should match Apache build (architecture, variant, and runtime linking)
 
 **cmake options:**
+
     -USER_STATIC_RUNTIME (default is OFF) and will use /MD and /MDd if on will build with /MT and /MTd for release and debug, respectively
     -APACHE_ROOT default is the local folder if not set. Otherwise set to the location of your apache instalation such as C:\Program Files\Apache24
 
 **examples for Visual Studio:**
 
 `cd mod_auth_ntlm`
+
 `cmake -B ./build-x64 -S ./ -G "Visual Studio 15 2017" -A x64 -T host=x64 -DAPACHE_ROOT="C:\Program Files\Apache24"`
+
 `cmake --build ./build-x64 --config Release`
+
 `cmake --build ./build-x64 --config Debug`
+
 static runtimes
+
 `cmake -B ./build-s-x64 -S ./ -G "Visual Studio 15 2017" -A x64 -T host=x64 -DAPACHE_ROOT="C:\Program Files\Apache24" -DUSE_STATIC_RUNTIME=ON`
+
 `cmake --build ./build-s-x64 --config Release`
+
 `cmake --build ./build-s-x64 --config Debug`
 
 **install mod_auth_ntlm.so to module path**
