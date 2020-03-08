@@ -117,8 +117,8 @@ Build instructions
 
 **cmake options:**
 
-    -USER_STATIC_RUNTIME (default is OFF) and will use /MD and /MDd if on will build with /MT and /MTd for release and debug, respectively
-    -APACHE_ROOT default is the local folder if not set. Otherwise set to the location of your apache instalation such as C:\Program Files\Apache24
+- USE_STATIC_RUNTIME (default is OFF) and will use /MD and /MDd if on will build with /MT and /MTd for release and debug, respectively
+- APACHE_ROOT default is the local folder if not set. Otherwise set to the location of your apache instalation such as C:\Program Files\Apache24
 
 **examples for Visual Studio:**
 
