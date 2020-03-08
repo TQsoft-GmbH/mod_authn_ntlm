@@ -48,3 +48,9 @@ file(GLOB_RECURSE SOURCE_FILES
 add_library(mod_authn_ntlm SHARED ${SOURCE_FILES})
 set_target_properties(mod_authn_ntlm PROPERTIES SUFFIX ".so")
 target_link_libraries(mod_authn_ntlm libhttpd ${LIBAPR} ${LIBAPRUTIL})
+
+install(TARGETS mod_authn_ntlm
+        CONFIGURATIONS Release
+        CONFIGURATIONS Debug
+        RUNTIME DESTINATION ${APACHE_ROOT}/modules
+)
