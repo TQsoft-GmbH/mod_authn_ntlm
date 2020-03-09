@@ -288,18 +288,17 @@ int get_sspi_header(sspi_auth_ctx *ctx)
 	 * and we're authoritative, reply 401 again */
 	scheme = ap_getword_white(ctx->r->pool, &auth_line);
 
-	if (ctx->crec->sspi_offerbasic &&
-		0 == lstrcmpi(scheme, "Basic")) {
+	
+	if (ctx->crec->sspi_offerbasic && 0 == lstrcmpi(scheme, "Basic")) {
 		ctx->scr->package = ctx->crec->sspi_package_basic;
 		ret = get_basic_userpass(ctx, auth_line);
 		sspi_set_domain(ctx);
 		sspi_set_default_domain(ctx);
 		return ret;
-	} else if (ctx->crec->sspi_offersspi &&
-		   0 == check_package_valid(ctx, scheme)) {
+	} else if (ctx->crec->sspi_offersspi && 0 == check_package_valid(ctx, scheme)) {
 		if (0 == ctx->scr->package)
-			ctx->scr->package =
-				apr_pstrdup(ctx->r->connection->pool, scheme);
+			ctx->scr->package = apr_pstrdup(ctx->r->connection->pool, scheme);
+
 		return get_sspi_userpass(ctx, auth_line);
 	}
 
