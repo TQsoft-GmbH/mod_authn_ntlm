@@ -12,7 +12,7 @@ endif()
 option( USE_STATIC_RUNTIME "use MSVC static runtimes" OFF)
 #
 # -- Windows option for static runtimes - must match Apache build
-#    default is OFF and will use /MD /MDd, whcih links against VC runtime dlls.
+#    default is OFF and will use /MD /MDd, which links against VC runtime dlls.
 #    USE_STATIC_RUNTIME uses /MT or /MTd, no VC dlls needed
 #    
 if(DEFINED USE_STATIC_RUNTIME AND USE_STATIC_RUNTIME AND WIN32)

@@ -113,12 +113,12 @@ Build instructions
 
 - Install the latest CMake from https://cmake.org/download/
 - Download Win64 Apache 2.4 from https://www.apachelounge.com/download/ (or use your own version)
-- note build options should match Apache build (architecture, variant, and runtime linking)
+- Build options should match Apache build (architecture, variant, and runtime linking)
 
 **cmake options:**
 
 - USE_STATIC_RUNTIME (default is OFF) and will use /MD and /MDd. If ON will build with /MT and /MTd for release and debug, respectively.
-- APACHE_ROOT default is the local folder if not set. Otherwise set to the location of your apache instalation such as C:\Program Files\Apache24.
+- APACHE_ROOT default is the local folder if not set. Otherwise set to the location of your apache installation such as C:\Program Files\Apache24.
 
 **examples for Visual Studio:**
 
