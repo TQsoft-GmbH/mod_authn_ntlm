@@ -25,7 +25,7 @@
 	$Releases = @()
 
 	$DownloadsPage = Invoke-WebRequest $ApacheLounge -UserAgent ""
-	$DownloadsPage.Links | Where-Object { $_.innerText -match "^httpd-([\d\.]+)-(win\d+)-(VC\d+).zip$" } | ForEach-Object {
+	$DownloadsPage.Links | Where-Object { $_.innerText -match "^httpd-([\d\.]+)-(win\d+)-(V[CS]\d+).zip$" } | ForEach-Object {
 		$Matches[2] = $Matches[2].ToLower().Replace("win32", "x86").Replace("win64", "x64")
 		$Releases += @{
 			DownloadFile = $Matches[0];
@@ -42,6 +42,10 @@
 
 	if (!$Release) {
 		throw "Unable to find an installable version of $Arch Apache $Version. Check that the version specified is correct."
+	}
+
+	if ($Release.DownloadUrl.Substring(0, 1) -eq "/") {
+		$Release.DownloadUrl = "https://www.apachelounge.com$($Release.DownloadUrl)";
 	}
 
 	$ApacheDownloadUri = $Release.DownloadUrl

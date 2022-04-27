@@ -5,9 +5,12 @@ setlocal enableextensions enabledelayedexpansion
 	cmake -G %GENERATOR% -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% ..
 	cmake --build . --config %CMAKE_BUILD_TYPE%
 
-	if not exist "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.dll" exit /b 3
+	if exist "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.dll" (
+		move "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.dll" "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.so"
+	)
 
-	move "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.dll" "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.so"
+	if not exist "%APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE%\mod_authn_ntlm.so" exit /b 3
+
 
 	xcopy %APPVEYOR_BUILD_FOLDER%\build\%CMAKE_BUILD_TYPE% %APPVEYOR_BUILD_FOLDER%\artifacts\%CMAKE_BUILD_TYPE%\ /y /f
 
